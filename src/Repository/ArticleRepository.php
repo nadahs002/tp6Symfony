@@ -21,6 +21,10 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
+    public function findByPriceRange($minValue,$maxValue) 
+    { return $this->createQueryBuilder('a') ->andWhere('a.prix >= :minVal') ->setParameter('minVal', $minValue) ->andWhere('a.prix <= :maxVal') ->setParameter('maxVal', $maxValue)
+        ->orderBy('a.id', 'ASC') ->setMaxResults(10) ->getQuery() ->getResult() ; }
+
     public function save(Article $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -38,6 +42,8 @@ class ArticleRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+
 
 //    /**
 //     * @return Article[] Returns an array of Article objects
@@ -63,4 +69,6 @@ class ArticleRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
 }
